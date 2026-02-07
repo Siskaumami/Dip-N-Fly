@@ -1,0 +1,520 @@
+{
+  "users": [
+    {
+      "id": "661efeb3-f22c-4847-ab51-14a4c8b76f19",
+      "username": "admindipnfly",
+      "passwordHash": "$2a$10$HqYXE3hvJdEQtm.6oIXzE.BGM8k0/cANbzWh3LoGELp4CerbvJS.i",
+      "role": "admin"
+    },
+    {
+      "id": "3077068d-995d-4c94-a3bf-6f024be694d3",
+      "username": "kasirdipnfly",
+      "passwordHash": "$2a$10$1PrjSbimzaq1/Gfd4iXFUe001fVBMfRFdbq0KowwLHx/hWlMA3Sym",
+      "role": "kasir"
+    }
+  ],
+  "products": [
+    {
+      "id": "317eb53c-e774-4f76-9e74-c4e3290a1b3d",
+      "name": "Kebab Turki",
+      "level": "",
+      "image": "/uploads/411a8115-43c1-4858-89dc-71b26da1113e.jpg",
+      "hpp": 6000,
+      "price": 10000,
+      "createdAt": "2026-01-30T11:38:33.750Z"
+    },
+    {
+      "id": "673368f3-923b-478d-a801-5dcb8f958d92",
+      "name": "Mie Goreng Pedas",
+      "level": "1",
+      "image": "/uploads/09c3de00-21be-47b5-bebe-fd35b1cf6055.jpg",
+      "hpp": 10000,
+      "price": 15000,
+      "createdAt": "2026-01-30T11:36:59.141Z"
+    },
+    {
+      "id": "5a909cc5-8950-4dcf-a417-74fd2e92a40d",
+      "name": "Nasi Goreng Ayam",
+      "level": "",
+      "image": "/uploads/3f0c9782-d7f9-4470-8148-1d19f315721b.jpg",
+      "hpp": 8000,
+      "price": 15000,
+      "createdAt": "2026-01-30T11:34:50.386Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "123ea23e-153d-4c42-9d37-eaddb030677e",
+      "code": "925295",
+      "tableCode": "MEJA04",
+      "items": [
+        {
+          "id": "3a700cc1-ce6e-44e3-ae1b-b9e4ed928171",
+          "productId": "317eb53c-e774-4f76-9e74-c4e3290a1b3d",
+          "name": "Kebab Turki",
+          "price": 10000,
+          "hpp": 6000,
+          "qty": 4
+        }
+      ],
+      "total": 40000,
+      "totalHpp": 24000,
+      "paymentMethod": "QRIS",
+      "status": "DONE",
+      "createdAt": "2026-02-07T06:29:07.256Z",
+      "updatedAt": "2026-02-07T10:29:54.370Z",
+      "cashierName": "Rini"
+    },
+    {
+      "id": "b9cbdca6-0769-4eef-8ba1-c63bdeed165e",
+      "code": "669271",
+      "tableCode": "MEJA02",
+      "items": [
+        {
+          "id": "ea82a1e6-cb79-48e7-933b-cfc811fa163b",
+          "productId": "673368f3-923b-478d-a801-5dcb8f958d92",
+          "name": "Mie Goreng Pedas",
+          "price": 15000,
+          "hpp": 10000,
+          "qty": 1
+        }
+      ],
+      "total": 15000,
+      "totalHpp": 10000,
+      "paymentMethod": "CASH",
+      "status": "DONE",
+      "createdAt": "2026-02-07T06:25:24.923Z",
+      "updatedAt": "2026-02-07T10:47:37.846Z",
+      "cashierName": "Rini"
+    },
+    {
+      "id": "9072c9aa-6b9f-40c5-8acf-8efdb81319eb",
+      "code": "316338",
+      "tableCode": "",
+      "items": [
+        {
+          "id": "235dcf53-9b86-49a1-999c-f5dc13404e40",
+          "productId": "317eb53c-e774-4f76-9e74-c4e3290a1b3d",
+          "name": "Kebab Turki",
+          "price": 10000,
+          "hpp": 6000,
+          "qty": 1
+        }
+      ],
+      "total": 10000,
+      "totalHpp": 6000,
+      "paymentMethod": "CASH",
+      "status": "NEW",
+      "createdAt": "2026-02-07T06:14:05.845Z",
+      "updatedAt": "2026-02-07T06:14:05.845Z",
+      "cashierName": ""
+    },
+    {
+      "id": "a069619e-e28e-4f4d-a704-a0573fece4b3",
+      "code": "499571",
+      "tableCode": "",
+      "items": [
+        {
+          "id": "a3d7c497-3054-41d0-a860-2b1f3beea58e",
+          "productId": "317eb53c-e774-4f76-9e74-c4e3290a1b3d",
+          "name": "Kebab Turki",
+          "price": 10000,
+          "hpp": 6000,
+          "qty": 1
+        }
+      ],
+      "total": 10000,
+      "totalHpp": 6000,
+      "paymentMethod": "QRIS",
+      "status": "DONE",
+      "createdAt": "2026-02-07T05:44:38.499Z",
+      "updatedAt": "2026-02-07T05:55:55.879Z",
+      "cashierName": "Rina"
+    },
+    {
+      "id": "58d7e25f-2f9c-4db9-9201-074b02f22704",
+      "code": "784030",
+      "tableCode": "",
+      "items": [
+        {
+          "id": "58b3ffaf-dc4c-4b43-921d-0f09f466ed00",
+          "productId": "317eb53c-e774-4f76-9e74-c4e3290a1b3d",
+          "name": "Kebab Turki",
+          "price": 10000,
+          "hpp": 6000,
+          "qty": 1
+        }
+      ],
+      "total": 10000,
+      "totalHpp": 6000,
+      "paymentMethod": "CASH",
+      "status": "DONE",
+      "createdAt": "2026-02-06T23:26:35.968Z",
+      "updatedAt": "2026-02-06T23:27:57.074Z",
+      "cashierName": "Rina"
+    },
+    {
+      "id": "ef374e4f-73f7-4f66-91bb-72dc5bda019b",
+      "code": "654018",
+      "tableCode": "MEJA01",
+      "items": [
+        {
+          "id": "c1f91fdd-05b4-4f77-a9ce-f360f2ead651",
+          "productId": "317eb53c-e774-4f76-9e74-c4e3290a1b3d",
+          "name": "Kebab Turki",
+          "price": 10000,
+          "hpp": 6000,
+          "qty": 1
+        }
+      ],
+      "total": 10000,
+      "totalHpp": 6000,
+      "paymentMethod": "CASH",
+      "status": "DONE",
+      "createdAt": "2026-01-31T11:43:54.405Z",
+      "updatedAt": "2026-01-31T11:44:21.084Z",
+      "cashierName": "Rina"
+    },
+    {
+      "id": "6dd5fc4b-54a6-494a-91a5-a1b101bde8e5",
+      "code": "959769",
+      "items": [
+        {
+          "id": "e5d9c7ee-1e30-4a5b-8774-c9879b29946e",
+          "productId": "673368f3-923b-478d-a801-5dcb8f958d92",
+          "name": "Mie Goreng Pedas",
+          "price": 15000,
+          "hpp": 10000,
+          "qty": 1
+        }
+      ],
+      "total": 15000,
+      "totalHpp": 10000,
+      "paymentMethod": "QRIS",
+      "status": "PROCESS",
+      "createdAt": "2026-01-31T11:29:47.213Z",
+      "updatedAt": "2026-01-31T11:30:12.601Z",
+      "cashierName": "Rina"
+    },
+    {
+      "id": "4de18d00-6569-4184-bb1d-9a4604e49d29",
+      "code": "801391",
+      "items": [
+        {
+          "id": "17de9060-7eb4-44a1-bada-32a75346c960",
+          "productId": "5a909cc5-8950-4dcf-a417-74fd2e92a40d",
+          "name": "Nasi Goreng Ayam",
+          "price": 15000,
+          "hpp": 8000,
+          "qty": 1
+        }
+      ],
+      "total": 15000,
+      "totalHpp": 8000,
+      "paymentMethod": "CASH",
+      "status": "DONE",
+      "createdAt": "2026-01-31T11:04:09.167Z",
+      "updatedAt": "2026-01-31T11:29:27.675Z",
+      "cashierName": "Rina"
+    },
+    {
+      "id": "c30839e9-32c0-4aae-8f4f-aaf4010d3f62",
+      "code": "582062",
+      "items": [
+        {
+          "id": "437eb39d-db5c-4d63-8ea4-083a68b39ba9",
+          "productId": "673368f3-923b-478d-a801-5dcb8f958d92",
+          "name": "Mie Goreng Pedas",
+          "price": 15000,
+          "hpp": 10000,
+          "qty": 1
+        }
+      ],
+      "total": 15000,
+      "totalHpp": 10000,
+      "paymentMethod": "CASH",
+      "status": "DONE",
+      "createdAt": "2026-01-31T10:54:07.705Z",
+      "updatedAt": "2026-01-31T10:54:27.156Z",
+      "cashierName": "Rina"
+    },
+    {
+      "id": "c868e7ec-84b4-4611-8e6e-cc6ab7a4c836",
+      "code": "673043",
+      "items": [
+        {
+          "id": "89a216bb-13b2-4939-a686-0b3892ead890",
+          "productId": "317eb53c-e774-4f76-9e74-c4e3290a1b3d",
+          "name": "Kebab Turki",
+          "price": 10000,
+          "hpp": 6000,
+          "qty": 1
+        },
+        {
+          "id": "c501ba65-c91e-4a40-b1ad-f2233032ac2e",
+          "productId": "673368f3-923b-478d-a801-5dcb8f958d92",
+          "name": "Mie Goreng Pedas",
+          "price": 15000,
+          "hpp": 10000,
+          "qty": 2
+        },
+        {
+          "id": "aa0a54ba-d2ac-4a36-80aa-267d047e6898",
+          "productId": "5a909cc5-8950-4dcf-a417-74fd2e92a40d",
+          "name": "Nasi Goreng Ayam",
+          "price": 15000,
+          "hpp": 8000,
+          "qty": 1
+        }
+      ],
+      "total": 55000,
+      "totalHpp": 34000,
+      "paymentMethod": "CASH",
+      "status": "DONE",
+      "createdAt": "2026-01-30T11:43:47.133Z",
+      "updatedAt": "2026-01-30T11:44:29.062Z",
+      "cashierName": "Rina"
+    },
+    {
+      "id": "e730c65c-b652-4c74-a6b6-62593498d12a",
+      "code": "648109",
+      "items": [
+        {
+          "id": "70cac99f-daa6-4b49-bd5b-4abaf11f592f",
+          "productId": "e3933a5b-ba09-47c4-ab1a-93b0153deb9c",
+          "name": "Kebab Spesial",
+          "price": 20,
+          "hpp": 10,
+          "qty": 1
+        },
+        {
+          "id": "1d5bb0f0-f021-4ea8-b371-840e1ac77578",
+          "productId": "a75c4f96-e9b1-4daf-b550-e09000816b60",
+          "name": "Mie Enak",
+          "price": 25,
+          "hpp": 15,
+          "qty": 3
+        }
+      ],
+      "total": 95,
+      "totalHpp": 55,
+      "paymentMethod": "CASH",
+      "status": "DONE",
+      "createdAt": "2026-01-30T10:35:01.314Z",
+      "updatedAt": "2026-01-30T10:35:56.491Z",
+      "cashierName": "Rini"
+    },
+    {
+      "id": "8e845c0e-d220-48be-856d-fdaf24e66d5b",
+      "code": "161539",
+      "items": [
+        {
+          "id": "789a191f-338f-4545-badb-b1b3b729da5a",
+          "productId": "a75c4f96-e9b1-4daf-b550-e09000816b60",
+          "name": "Mie Enak",
+          "price": 25,
+          "hpp": 15,
+          "qty": 1
+        }
+      ],
+      "total": 25,
+      "totalHpp": 15,
+      "paymentMethod": "CASH",
+      "status": "DONE",
+      "createdAt": "2026-01-30T10:33:05.822Z",
+      "updatedAt": "2026-01-30T10:33:22.448Z",
+      "cashierName": "Rina"
+    },
+    {
+      "id": "88e44044-0c0a-48dd-9e91-82f372a81ec9",
+      "code": "416170",
+      "items": [
+        {
+          "id": "0ac0d3dc-5d50-45fc-9e6a-cefa89a28c57",
+          "productId": "e3933a5b-ba09-47c4-ab1a-93b0153deb9c",
+          "name": "Kebab Spesial",
+          "price": 20,
+          "hpp": 10,
+          "qty": 3
+        }
+      ],
+      "total": 60,
+      "totalHpp": 30,
+      "paymentMethod": "QRIS",
+      "status": "DONE",
+      "createdAt": "2026-01-30T10:28:43.509Z",
+      "updatedAt": "2026-01-30T10:32:50.006Z",
+      "cashierName": "Rina"
+    }
+  ],
+  "shifts": [
+    {
+      "id": "2571eef4-ff5d-4b15-98d2-3829d6c83ec1",
+      "cashierName": "Rini",
+      "startAt": "2026-02-07T10:44:29.317Z",
+      "endAt": null,
+      "createdBy": "kasirdipnfly"
+    },
+    {
+      "id": "82a280cb-679a-4a9c-a115-e81e47e8a504",
+      "cashierName": "Rina",
+      "startAt": "2026-02-06T23:25:52.844Z",
+      "endAt": null,
+      "createdBy": "kasirdipnfly"
+    },
+    {
+      "id": "c9f85341-043c-4169-aabf-746d8a70af02",
+      "cashierName": "Rina",
+      "startAt": "2026-02-06T19:57:49.533Z",
+      "endAt": null,
+      "createdBy": "kasirdipnfly"
+    },
+    {
+      "id": "ab1b3d54-86f9-4490-8ce8-794963be1a14",
+      "cashierName": "Rina",
+      "startAt": "2026-01-31T10:53:26.382Z",
+      "endAt": "2026-02-06T19:56:53.120Z",
+      "createdBy": "kasirdipnfly",
+      "ordersHandled": 4,
+      "updatedAt": "2026-02-06T19:56:53.121Z"
+    },
+    {
+      "id": "e4b3532a-1040-4f32-a52a-6f5b4ac85c38",
+      "cashierName": "Rina",
+      "startAt": "2026-01-30T11:44:05.375Z",
+      "endAt": null,
+      "createdBy": "kasirdipnfly"
+    },
+    {
+      "id": "66c5b214-c921-40ef-9c95-8cadce57072d",
+      "cashierName": "Rina",
+      "startAt": "2026-01-30T11:28:01.711Z",
+      "endAt": null,
+      "createdBy": "kasirdipnfly"
+    },
+    {
+      "id": "6fee19ba-6950-41b9-8861-9ba4a4938ecf",
+      "cashierName": "Rini",
+      "startAt": "2026-01-30T10:35:44.636Z",
+      "endAt": "2026-02-07T10:30:28.089Z",
+      "createdBy": "kasirdipnfly",
+      "ordersHandled": 2,
+      "updatedAt": "2026-02-07T10:30:28.089Z"
+    },
+    {
+      "id": "51da62fa-e51c-416f-ad9d-115fe1793cac",
+      "cashierName": "Rina",
+      "startAt": "2026-01-30T10:29:04.384Z",
+      "endAt": "2026-01-30T11:27:48.590Z",
+      "createdBy": "kasirdipnfly",
+      "ordersHandled": 2,
+      "updatedAt": "2026-01-30T11:27:48.593Z"
+    }
+  ],
+  "settings": {
+    "qrisImage": "/uploads/3e593c73-5d78-4430-bcbc-6b3fc586c18a.jpg",
+    "qrisUpdatedAt": "2026-01-30T10:26:19.236Z"
+  },
+  "tables": [
+    {
+      "id": 1,
+      "name": "Meja 1",
+      "code": "MEJA01"
+    },
+    {
+      "id": 2,
+      "name": "Meja 2",
+      "code": "MEJA02"
+    },
+    {
+      "id": 3,
+      "name": "Meja 3",
+      "code": "MEJA03"
+    },
+    {
+      "id": 4,
+      "name": "Meja 4",
+      "code": "MEJA04"
+    },
+    {
+      "id": 5,
+      "name": "Meja 5",
+      "code": "MEJA05"
+    },
+    {
+      "id": 6,
+      "name": "Meja 6",
+      "code": "MEJA06"
+    },
+    {
+      "id": 7,
+      "name": "Meja 7",
+      "code": "MEJA07"
+    },
+    {
+      "id": 8,
+      "name": "Meja 8",
+      "code": "MEJA08"
+    },
+    {
+      "id": 9,
+      "name": "Meja 9",
+      "code": "MEJA09"
+    },
+    {
+      "id": 10,
+      "name": "Meja 10",
+      "code": "MEJA10"
+    },
+    {
+      "id": 11,
+      "name": "Meja 11",
+      "code": "MEJA11"
+    },
+    {
+      "id": 12,
+      "name": "Meja 12",
+      "code": "MEJA12"
+    },
+    {
+      "id": 13,
+      "name": "Meja 13",
+      "code": "MEJA13"
+    },
+    {
+      "id": 14,
+      "name": "Meja 14",
+      "code": "MEJA14"
+    },
+    {
+      "id": 15,
+      "name": "Meja 15",
+      "code": "MEJA15"
+    },
+    {
+      "id": 16,
+      "name": "Meja 16",
+      "code": "MEJA16"
+    },
+    {
+      "id": 17,
+      "name": "Meja 17",
+      "code": "MEJA17"
+    },
+    {
+      "id": 18,
+      "name": "Meja 18",
+      "code": "MEJA18"
+    },
+    {
+      "id": 19,
+      "name": "Meja 19",
+      "code": "MEJA19"
+    },
+    {
+      "id": 20,
+      "name": "Meja 20",
+      "code": "MEJA20"
+    }
+  ]
+}
