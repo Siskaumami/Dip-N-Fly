@@ -1,27 +1,27 @@
 # ---- build frontend ----
-FROM node:20-alpine AS build-frontend
-WORKDIR /app/frontend
+FROM node:20-alpine AS build
+WORKDIR /app
 
-COPY frontend/package*.json ./
-RUN npm ci
+# install deps frontend
+COPY frontend/package*.json ./frontend/
+RUN cd frontend && npm ci --include=dev
 
-COPY frontend/ ./
-RUN npm run build
+# copy source
+COPY frontend ./frontend
+COPY backend ./backend
 
+# build frontend -> hasil masuk ke /app/backend/dist
+RUN cd frontend && npm run build
 
 # ---- run backend ----
 FROM node:20-alpine AS run
-WORKDIR /app
-
-COPY backend/package*.json ./backend/
-RUN cd backend && npm ci --omit=dev
-
-COPY backend/ ./backend/
-
-# hasil build frontend taruh di /app/frontend/dist
-COPY --from=build-frontend /app/frontend/dist ./frontend/dist
-
 WORKDIR /app/backend
-ENV NODE_ENV=production
+
+COPY backend/package*.json ./
+RUN npm ci
+
+# copy backend source + dist hasil build
+COPY --from=build /app/backend /app/backend
+
 EXPOSE 8080
 CMD ["npm","start"]
