@@ -11,7 +11,9 @@ function rupiah(n) {
 }
 
 function backendOrigin() {
-  return import.meta.env.VITE_BACKEND_ORIGIN || 'http://localhost:3001';
+  return import.meta.env.PROD
+    ? '' // production: same origin (https://dip-n-fly-production...)
+    : (import.meta.env.VITE_BACKEND_ORIGIN || 'http://localhost:3001'); // local
 }
 
 async function downloadPdf(endpoint, filename) {
