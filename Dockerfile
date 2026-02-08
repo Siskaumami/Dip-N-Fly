@@ -4,14 +4,19 @@ WORKDIR /app
 
 # install deps frontend
 COPY frontend/package*.json ./frontend/
-RUN cd frontend && npm ci --include=dev
+RUN cd frontend && npm ci
 
 # copy source
 COPY frontend ./frontend
 COPY backend ./backend
 
-# build frontend -> hasil masuk ke /app/backend/dist
+# build frontend (hasilnya: /app/frontend/dist)
 RUN cd frontend && npm run build
+
+# >>> PENTING: pindahin hasil build ke backend/dist
+RUN rm -rf /app/backend/dist \
+  && mkdir -p /app/backend/dist \
+  && cp -R /app/frontend/dist/* /app/backend/dist/
 
 # ---- run backend ----
 FROM node:20-alpine AS run
