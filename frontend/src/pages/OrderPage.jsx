@@ -8,6 +8,11 @@ function rupiah(n) {
   return 'Rp ' + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
+// ✅ FIX: di production (Railway) pakai same-origin, di local pakai localhost backend
+function backendOrigin() {
+  return import.meta.env.PROD ? '' : (import.meta.env.VITE_BACKEND_ORIGIN || 'http://localhost:3001');
+}
+
 export default function OrderPage() {
   const params = useParams();
   const tableCode = (params.tableCode || '').toString(); // <-- ambil dari /m/:tableCode
@@ -70,6 +75,8 @@ export default function OrderPage() {
     }
   }
 
+  const origin = backendOrigin();
+
   return (
     <div className="grid">
       <div className="card" style={{ gridColumn: 'span 7' }}>
@@ -94,7 +101,8 @@ export default function OrderPage() {
               <div className="menuCard">
                 <img
                   className="menuImg"
-                  src={m.image ? (import.meta.env.VITE_BACKEND_ORIGIN || 'http://localhost:3001') + m.image : ''}
+                  // ✅ FIX: PROD -> "/uploads/..." ; DEV -> "http://localhost:3001/uploads/..."
+                  src={m.image ? origin + m.image : ''}
                   alt={m.name}
                 />
                 <div style={{ minWidth: 0 }}>
@@ -281,13 +289,15 @@ export default function OrderPage() {
         ) : (
           <div style={{ display:'grid', gap:10 }}>
             <img
-              src={(import.meta.env.VITE_BACKEND_ORIGIN || 'http://localhost:3001') + qrisImage}
+              // ✅ FIX: sama logic-nya
+              src={origin + qrisImage}
               alt="QRIS"
               style={{ width:'100%', maxWidth: 320, borderRadius: 14, border:'1px solid var(--border)' }}
             />
             <a
               className="btn primary"
-              href={(import.meta.env.VITE_BACKEND_ORIGIN || 'http://localhost:3001') + qrisImage}
+              // ✅ FIX: download link juga
+              href={origin + qrisImage}
               download
               style={{ textAlign:'center' }}
             >
