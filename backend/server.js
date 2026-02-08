@@ -12,7 +12,6 @@ import { ensureDbSeeded } from './src/services/db.js';
 import publicRoutes from "./src/routes/public.js";
 import tablesRoutes from "./src/routes/tables.js";
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -21,35 +20,33 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-app.use("/", publicRoutes);
-app.use("/api/admin/tables", tablesRoutes);
-
-
 // uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
+app.use("/api/admin/tables", tablesRoutes);
 app.use('/api', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/kasir', kasirRoutes);
 app.use('/api', customerRoutes);
 
-// Serve frontend build in production (optional)
-const distPath = path.join(__dirname, '..', 'frontend', 'dist');
+// 👉 kalau publicRoutes itu beneran endpoint API, mending kasih prefix:
+app.use("/api", publicRoutes);
+
+// Serve frontend build (INI PATH YANG BENER sesuai Dockerfile kamu)
+const distPath = path.join(__dirname, 'dist');
 app.use(express.static(distPath));
+
+// SPA fallback (HARUS PALING BAWAH)
 app.get('*', (req, res) => {
-  const indexHtml = path.join(distPath, 'index.html');
-  res.sendFile(indexHtml, (err) => {
-    if (err) res.status(404).send('Frontend not built. Run frontend build first.');
-  });
+  res.sendFile(path.join(distPath, 'index.html'));
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8080;
 
 await ensureDbSeeded();
 
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
   console.log(`Dip N Fly backend running on :${PORT}`);
 });
