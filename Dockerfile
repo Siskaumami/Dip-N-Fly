@@ -1,26 +1,27 @@
-# Multi-stage: build frontend then run backend
+# ---- build frontend ----
 FROM node:20-alpine AS build-frontend
 WORKDIR /app/frontend
-COPY frontend/package.json frontend/package-lock.json* ./
-RUN npm install
-COPY frontend ./
+
+COPY frontend/package*.json ./
+RUN npm ci
+
+COPY frontend/ ./
 RUN npm run build
 
+
+# ---- run backend ----
 FROM node:20-alpine AS run
 WORKDIR /app
 
-# Backend deps
-COPY backend/package.json backend/package-lock.json* ./backend/
-RUN cd backend && npm install
+COPY backend/package*.json ./backend/
+RUN cd backend && npm ci --omit=dev
 
-# Backend source
-COPY backend ./backend
+COPY backend/ ./backend/
 
-# Frontend build output
+# hasil build frontend taruh di /app/frontend/dist
 COPY --from=build-frontend /app/frontend/dist ./frontend/dist
 
-ENV NODE_ENV=production
-EXPOSE 3001
-
 WORKDIR /app/backend
-CMD ["node", "server.js"]
+ENV NODE_ENV=production
+EXPOSE 8080
+CMD ["npm","start"]
