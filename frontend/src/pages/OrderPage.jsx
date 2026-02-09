@@ -13,21 +13,28 @@ function backendOrigin() {
   return import.meta.env.PROD ? '' : (import.meta.env.VITE_BACKEND_ORIGIN || 'http://localhost:3001');
 }
 
+function normalizeCode(v) {
+  return String(v || '').trim().toUpperCase();
+}
+
 export default function OrderPage() {
   const params = useParams();
   const location = useLocation();
 
   // ✅ Ambil tableCode dari:
-  // 1) /m/:tableCode  (kalau kamu pakai)
-  // 2) /order?meja=1  (ini yang dipakai QR Print kamu)
+  // 1) /m/:tableCode
+  // 2) ?meja=MEJA01
   const mejaFromQuery = new URLSearchParams(location.search).get('meja') || '';
-  const tableCode = ((params.tableCode || mejaFromQuery) || '').toString();
+  const tableCode = normalizeCode(params.tableCode || mejaFromQuery);
 
   const [menu, setMenu] = useState([]);
   const [qrisImage, setQrisImage] = useState(null);
 
+  // NOTE: pick modal masih disiapkan kalau kamu mau pakai lagi nanti,
+  // tapi tombol "Tambah" sekarang langsung addToCart.
   const [pick, setPick] = useState(null);
   const [pickQty, setPickQty] = useState(1);
+
   const [cart, setCart] = useState([]);
 
   const [showInvoice, setShowInvoice] = useState(false);
@@ -38,19 +45,35 @@ export default function OrderPage() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
     (async () => {
-      const m = await api.get('/menu');
-      setMenu(m.data || []);
-      const q = await api.get('/qris');
-      setQrisImage(q.data?.qrisImage || null);
+      try {
+        const m = await api.get('/menu');
+        if (!mounted) return;
+        setMenu(m.data || []);
+      } catch (e) {
+        console.error('GET /menu failed:', e);
+        if (mounted) setMenu([]);
+      }
+
+      try {
+        const q = await api.get('/qris');
+        if (!mounted) return;
+        setQrisImage(q.data?.qrisImage || null);
+      } catch (e) {
+        console.error('GET /qris failed:', e);
+        if (mounted) setQrisImage(null);
+      }
     })();
+    return () => { mounted = false; };
   }, []);
 
   const total = useMemo(() => {
-    return cart.reduce((s, it) => s + (it.product.price * it.qty), 0);
+    return cart.reduce((s, it) => s + (Number(it.product.price) * it.qty), 0);
   }, [cart]);
 
-  function addToCart(product, qty) {
+  // ✅ FIX UTAMA: Tambah ke cart HARUS immutable
+  function addToCart(product, qty = 1) {
     setCart((prev) => {
       const idx = prev.findIndex((x) => x.product.id === product.id);
       if (idx >= 0) {
@@ -62,10 +85,14 @@ export default function OrderPage() {
     });
   }
 
+  // ✅ qty update immutable + kalau qty <= 0 hapus item
   function setQty(productId, qty) {
-    setCart((prev) =>
-      prev.map((x) => (x.product.id === productId ? { ...x, qty: Math.max(1, qty) } : x))
-    );
+    setCart((prev) => {
+      if (qty <= 0) return prev.filter((x) => x.product.id !== productId);
+      return prev.map((x) =>
+        x.product.id === productId ? { ...x, qty } : x
+      );
+    });
   }
 
   function removeItem(productId) {
@@ -73,9 +100,12 @@ export default function OrderPage() {
   }
 
   async function placeOrder(paymentMethod) {
-    // ✅ Biar gak “diam aja” kalau tableCode kosong
     if (!tableCode) {
-      alert('Scan QR meja dulu ya (contoh link: /order?meja=1)');
+      alert('Scan QR meja dulu ya. Contoh link: /m/MEJA01 atau /order?meja=MEJA01');
+      return;
+    }
+    if (cart.length === 0) {
+      alert('Pesanan masih kosong.');
       return;
     }
 
@@ -83,6 +113,13 @@ export default function OrderPage() {
     try {
       const items = cart.map((x) => ({ productId: x.product.id, qty: x.qty }));
       await api.post('/orders', { items, paymentMethod, tableCode });
+
+      // reset cart setelah sukses
+      setCart([]);
+    } catch (e) {
+      const msg = e?.response?.data?.message || e?.message || 'Order gagal';
+      alert(msg);
+      console.error('POST /orders failed:', e);
     } finally {
       setBusy(false);
     }
@@ -123,7 +160,13 @@ export default function OrderPage() {
                     {rupiah(m.price)} {m.level ? `• Level: ${m.level}` : ''}
                   </div>
                 </div>
-                <button className="btn primary right" onClick={() => { setPick(m); setPickQty(1); }}>
+
+                {/* ✅ FIX: langsung nambah cart */}
+                <button
+                  className="btn primary right"
+                  onClick={() => addToCart(m, 1)}
+                  disabled={busy}
+                >
                   Tambah
                 </button>
               </div>
@@ -138,7 +181,7 @@ export default function OrderPage() {
             <div className="badge">Pesanan Saya</div>
             <div style={{ fontSize: 22, fontWeight: 900, marginTop: 8 }}>Ringkasan</div>
           </div>
-          <div className="badge">{cart.length} item</div>
+          <div className="badge">{cart.reduce((s, it) => s + it.qty, 0)} item</div>
         </div>
 
         <div className="hr" />
@@ -157,10 +200,10 @@ export default function OrderPage() {
                     </div>
                   </div>
                   <div className="right qty">
-                    <button className="btn ghost qtyBtn" onClick={() => setQty(it.product.id, it.qty - 1)}>-</button>
+                    <button className="btn ghost qtyBtn" onClick={() => setQty(it.product.id, it.qty - 1)} disabled={busy}>-</button>
                     <div style={{ width: 28, textAlign:'center', fontWeight: 900 }}>{it.qty}</div>
-                    <button className="btn ghost qtyBtn" onClick={() => setQty(it.product.id, it.qty + 1)}>+</button>
-                    <button className="btn danger" onClick={() => removeItem(it.product.id)}>Hapus</button>
+                    <button className="btn ghost qtyBtn" onClick={() => setQty(it.product.id, it.qty + 1)} disabled={busy}>+</button>
+                    <button className="btn danger" onClick={() => removeItem(it.product.id)} disabled={busy}>Hapus</button>
                   </div>
                 </div>
               </div>
@@ -175,13 +218,30 @@ export default function OrderPage() {
         </div>
 
         <div style={{ marginTop: 12, display:'flex', gap:10, flexWrap:'wrap' }}>
-          <button className="btn ghost" onClick={() => setCart([])} disabled={cart.length === 0}>Reset</button>
-          <button className="btn primary" onClick={() => setShowInvoice(true)} disabled={cart.length === 0}>Order</button>
+          <button className="btn ghost" onClick={() => setCart([])} disabled={cart.length === 0 || busy}>Reset</button>
+
+          {/* Kamu bisa tetap pakai modal invoice/payment kamu.
+              Tapi biar flow jalan, tombol Order ini bisa langsung buka invoice atau langsung placeOrder. */}
+          <button
+            className="btn primary"
+            onClick={() => setShowInvoice(true)}
+            disabled={cart.length === 0 || busy}
+          >
+            Order
+          </button>
         </div>
       </div>
 
-      {/* (Modal lainnya biarin seperti punyamu, gak perlu gue ulangin) */}
-      {/* Pastikan di tempat QRIS juga pakai origin + qrisImage seperti sebelumnya */}
+      {/* ===== Modal/Flow pembayaran kamu boleh tetap =====
+          Yang penting: saat final submit, panggil placeOrder("CASH") / placeOrder("QRIS")
+          dan QRIS image pakai: origin + qrisImage (kalau qrisImage itu path /uploads/...)
+      */}
+      {/* Contoh minimal kalau kamu mau langsung order tanpa modal:
+        <Modal open={showInvoice} onClose={() => setShowInvoice(false)}>
+          <button onClick={() => placeOrder("CASH")}>Cash</button>
+          <button onClick={() => placeOrder("QRIS")}>QRIS</button>
+        </Modal>
+      */}
     </div>
   );
 }
