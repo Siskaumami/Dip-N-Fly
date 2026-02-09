@@ -13,8 +13,22 @@ function backendOrigin() {
   return import.meta.env.PROD ? '' : (import.meta.env.VITE_BACKEND_ORIGIN || 'http://localhost:3001');
 }
 
-function normalizeCode(v) {
-  return String(v || '').trim().toUpperCase();
+// ✅ NORMALISASI tableCode:
+// - kalau sudah "MEJA01" -> MEJA01
+// - kalau query "1" -> MEJA01
+// - kalau query "12" -> MEJA12
+function normalizeTableCode(v) {
+  const raw = String(v || '').trim();
+  if (!raw) return '';
+
+  // sudah format MEJAxx
+  if (/^MEJA\d+$/i.test(raw)) return raw.toUpperCase();
+
+  // angka saja -> MEJAxx (pad 2 digit)
+  if (/^\d+$/.test(raw)) return `MEJA${raw.padStart(2, '0')}`;
+
+  // fallback
+  return raw.toUpperCase();
 }
 
 export default function OrderPage() {
@@ -23,15 +37,14 @@ export default function OrderPage() {
 
   // ✅ Ambil tableCode dari:
   // 1) /m/:tableCode
-  // 2) ?meja=MEJA01
+  // 2) ?meja=MEJA01 atau ?meja=1
   const mejaFromQuery = new URLSearchParams(location.search).get('meja') || '';
-  const tableCode = normalizeCode(params.tableCode || mejaFromQuery);
+  const tableCode = normalizeTableCode(params.tableCode || mejaFromQuery);
 
   const [menu, setMenu] = useState([]);
   const [qrisImage, setQrisImage] = useState(null);
 
-  // NOTE: pick modal masih disiapkan kalau kamu mau pakai lagi nanti,
-  // tapi tombol "Tambah" sekarang langsung addToCart.
+  // (disiapkan kalau nanti mau pakai modal pick lagi)
   const [pick, setPick] = useState(null);
   const [pickQty, setPickQty] = useState(1);
 
@@ -72,7 +85,7 @@ export default function OrderPage() {
     return cart.reduce((s, it) => s + (Number(it.product.price) * it.qty), 0);
   }, [cart]);
 
-  // ✅ FIX UTAMA: Tambah ke cart HARUS immutable
+  // ✅ Tambah ke cart HARUS immutable
   function addToCart(product, qty = 1) {
     setCart((prev) => {
       const idx = prev.findIndex((x) => x.product.id === product.id);
@@ -101,7 +114,7 @@ export default function OrderPage() {
 
   async function placeOrder(paymentMethod) {
     if (!tableCode) {
-      alert('Scan QR meja dulu ya. Contoh link: /m/MEJA01 atau /order?meja=MEJA01');
+      alert('Scan QR meja dulu ya. Contoh: /m/MEJA01 atau /order?meja=1');
       return;
     }
     if (cart.length === 0) {
@@ -114,7 +127,7 @@ export default function OrderPage() {
       const items = cart.map((x) => ({ productId: x.product.id, qty: x.qty }));
       await api.post('/orders', { items, paymentMethod, tableCode });
 
-      // reset cart setelah sukses
+      alert('✅ Order terkirim ke kasir!');
       setCart([]);
     } catch (e) {
       const msg = e?.response?.data?.message || e?.message || 'Order gagal';
@@ -161,7 +174,6 @@ export default function OrderPage() {
                   </div>
                 </div>
 
-                {/* ✅ FIX: langsung nambah cart */}
                 <button
                   className="btn primary right"
                   onClick={() => addToCart(m, 1)}
@@ -220,28 +232,21 @@ export default function OrderPage() {
         <div style={{ marginTop: 12, display:'flex', gap:10, flexWrap:'wrap' }}>
           <button className="btn ghost" onClick={() => setCart([])} disabled={cart.length === 0 || busy}>Reset</button>
 
-          {/* Kamu bisa tetap pakai modal invoice/payment kamu.
-              Tapi biar flow jalan, tombol Order ini bisa langsung buka invoice atau langsung placeOrder. */}
+          {/* ✅ FIX: tombol Order benar-benar submit order */}
           <button
             className="btn primary"
-            onClick={() => setShowInvoice(true)}
             disabled={cart.length === 0 || busy}
+            onClick={() => {
+              const isCash = window.confirm('OK = CASH\nCancel = QRIS');
+              placeOrder(isCash ? 'CASH' : 'QRIS');
+            }}
           >
-            Order
+            {busy ? 'Mengirim...' : 'Order'}
           </button>
         </div>
       </div>
 
-      {/* ===== Modal/Flow pembayaran kamu boleh tetap =====
-          Yang penting: saat final submit, panggil placeOrder("CASH") / placeOrder("QRIS")
-          dan QRIS image pakai: origin + qrisImage (kalau qrisImage itu path /uploads/...)
-      */}
-      {/* Contoh minimal kalau kamu mau langsung order tanpa modal:
-        <Modal open={showInvoice} onClose={() => setShowInvoice(false)}>
-          <button onClick={() => placeOrder("CASH")}>Cash</button>
-          <button onClick={() => placeOrder("QRIS")}>QRIS</button>
-        </Modal>
-      */}
+      {/* Modal masih boleh kamu pakai nanti, tapi sekarang order sudah pasti jalan */}
     </div>
   );
 }
