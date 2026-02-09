@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import Modal from '../components/Modal.jsx';
 import { api } from '../api';
 
@@ -15,7 +15,14 @@ function backendOrigin() {
 
 export default function OrderPage() {
   const params = useParams();
-  const tableCode = (params.tableCode || '').toString(); // ambil dari /m/:tableCode
+  const location = useLocation();
+
+  // ambil dari:
+  // - /m/:tableCode   (contoh: /m/1)
+  // - /order?meja=1   (link dari QR Print Admin)
+  const mejaFromQuery = new URLSearchParams(location.search).get('meja');
+  const tableCode = (params.tableCode || mejaFromQuery || '').toString();
+
 
   const [menu, setMenu] = useState([]);
   const [qrisImage, setQrisImage] = useState(null);
