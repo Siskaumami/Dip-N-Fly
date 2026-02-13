@@ -1,19 +1,22 @@
 FROM node:20-alpine
 WORKDIR /app
 
-# 1) Install deps backend (ini yang bikin express ada)
+# Install deps backend
 COPY backend/package*.json ./backend/
 RUN npm install --prefix backend --include=dev
 
-# 2) Install deps frontend (ini yang bikin vite ada)
+# Install deps frontend
 COPY frontend/package*.json ./frontend/
 RUN npm install --prefix frontend --include=dev
 
-# 3) Copy semua source
+# Copy source
 COPY . .
 
-# 4) Build frontend (anggap script build root kamu memang build FE ke backend/dist)
-RUN npm run build
+# Build frontend (Vite)
+RUN npm --prefix frontend run build
+
+# Pastikan backend/dist ada, lalu copy hasil build frontend ke backend/dist
+RUN rm -rf backend/dist && mkdir -p backend/dist && cp -r frontend/dist/* backend/dist/
 
 EXPOSE 8080
 CMD ["npm", "start"]
