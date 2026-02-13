@@ -1,18 +1,18 @@
 FROM node:20-alpine
 WORKDIR /app
 
-# Install deps backend/root
-COPY package*.json ./
-RUN npm ci
+# install deps backend/root
+COPY package.json ./
+RUN npm install
 
-# Install deps frontend (INI YANG BIKIN VITE ADA)
-COPY frontend/package*.json ./frontend/
-RUN npm ci --prefix frontend
+# install deps frontend (supaya vite ada)
+COPY frontend/package.json ./frontend/
+RUN npm install --prefix frontend
 
-# Copy semua source setelah deps biar cache Docker kepake
+# copy semua source
 COPY . .
 
-# Build frontend
+# build frontend (panggil script build di root yang udah kamu punya)
 RUN npm run build
 
 EXPOSE 8080
